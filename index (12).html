@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fast Mechanic Solutions LLC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red: #cc0000;
+      --red-bright: #ff1a1a;
+      --dark: #0a0a0a;
+      --dark2: #111111;
+      --dark3: #1a1a1a;
+      --white: #ffffff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: var(--dark); color: var(--white); overflow-x: hidden; }
+
+    /* LANG */
+    .lang-toggle { display: flex; align-items: center; background: var(--dark3); border: 1px solid #333; border-radius: 4px; overflow: hidden; }
+    .lang-btn { background: none; border: none; cursor: pointer; color: #888; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 2px; padding: 7px 14px; text-transform: uppercase; transition: background .2s, color .2s; }
+    .lang-btn.active { background: var(--red); color: var(--white); }
+    .lang-btn:not(.active):hover { color: var(--white); }
+
+    /* NAV */
+    nav { position: fixed; top: 0; width: 100%; z-index: 100; background: rgba(10,10,10,0.96); backdrop-filter: blur(12px); border-bottom: 2px solid var(--red); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 70px; gap: 16px; }
+    .nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.3rem; letter-spacing: 2px; text-transform: uppercase; color: var(--white); white-space: nowrap; }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { color: #f0f0f0; text-decoration: none; font-size: 0.82rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; transition: color .2s; }
+    .nav-links a:hover { color: var(--red); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-cta { background: var(--red); color: var(--white); border: none; padding: 10px 22px; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); transition: background .2s; text-decoration: none; white-space: nowrap; }
+    .nav-cta:hover { background: var(--red-bright); }
+
+    /* HERO */
+    #hero { min-height: 100vh; display: flex; align-items: center; padding: 100px 40px 60px; position: relative; overflow: hidden; background: linear-gradient(135deg,#000 0%,#1a0000 50%,#000 100%); }
+    #hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(204,0,0,0.03) 40px,rgba(204,0,0,0.03) 41px); }
+    .hero-glow { position: absolute; right: -60px; top: 50%; transform: translateY(-50%); width: 500px; height: 500px; background: radial-gradient(circle,rgba(204,0,0,0.15) 0%,transparent 70%); pointer-events: none; }
+    .hero-bars { position: absolute; right: 60px; bottom: 60px; display: flex; gap: 8px; align-items: flex-end; }
+    .hero-bars span { width: 12px; background: var(--red); opacity: 0.7; animation: barPulse 1.5s ease-in-out infinite; }
+    .hero-bars span:nth-child(1){height:30px;animation-delay:0s} .hero-bars span:nth-child(2){height:50px;animation-delay:.2s} .hero-bars span:nth-child(3){height:70px;animation-delay:.4s}
+    @keyframes barPulse { 0%,100%{opacity:.7} 50%{opacity:1} }
+    .hero-content { max-width: 700px; position: relative; z-index: 2; }
+    .hero-badge { display: inline-block; background: var(--red); color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; padding: 6px 18px; clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%); margin-bottom: 24px; animation: fadeUp .6s ease both; }
+    .hero-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3.5rem,8vw,6.5rem); line-height: .9; text-transform: uppercase; letter-spacing: -1px; animation: fadeUp .6s .1s ease both; }
+    .hero-title .red { color: var(--red); }
+    .hero-subtitle { margin-top: 24px; font-size: 1.1rem; color: #aaa; font-weight: 300; line-height: 1.6; max-width: 500px; animation: fadeUp .6s .2s ease both; }
+    .hero-actions { display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap; animation: fadeUp .6s .3s ease both; }
+    .btn-primary { background: var(--red); color: var(--white); text-decoration: none; padding: 14px 32px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; clip-path: polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); transition: background .2s,transform .2s; display: inline-block; }
+    .btn-primary:hover { background: var(--red-bright); transform: translateX(4px); }
+    .btn-outline { background: transparent; color: var(--white); text-decoration: none; padding: 13px 32px; border: 2px solid #444; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; clip-path: polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); transition: border-color .2s,color .2s; display: inline-block; }
+    .btn-outline:hover { border-color: var(--red); color: var(--red); }
+    .hero-stats { display: flex; gap: 40px; margin-top: 60px; animation: fadeUp .6s .4s ease both; flex-wrap: wrap; }
+    .stat-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2.5rem; color: var(--red); line-height: 1; }
+    .stat-label { font-size: .75rem; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 4px; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+    /* SHARED */
+    section { padding: 90px 40px; }
+    .section-tag { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .75rem; letter-spacing: 4px; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+    .section-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2.2rem,5vw,3.8rem); text-transform: uppercase; line-height: 1; margin-bottom: 16px; }
+    .section-sub { color: #888; font-size: 1rem; max-width: 520px; line-height: 1.7; margin-bottom: 48px; }
+    .max-w { max-width: 1200px; margin: 0 auto; }
+
+    /* SERVICES */
+    #servicios { background: var(--dark2); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 2px; }
+    .service-card { background: var(--dark3); padding: 36px 28px; border-bottom: 3px solid transparent; transition: border-color .3s,background .3s,transform .3s; position: relative; overflow: hidden; }
+    .service-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--red); transition: height .3s; }
+    .service-card:hover { background: #222; border-color: var(--red); transform: translateY(-4px); }
+    .service-card:hover::before { height: 100%; }
+    .service-icon { font-size: 2rem; margin-bottom: 16px; }
+    .service-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.15rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .service-desc { font-size: .85rem; color: #888; line-height: 1.6; }
+    .badge-24 { display: inline-flex; align-items: center; gap: 8px; background: var(--red); color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: .95rem; letter-spacing: 2px; text-transform: uppercase; padding: 8px 20px; margin-bottom: 32px; clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); }
+    .badge-24 .dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; animation: blink 1s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .services-24 { margin-top: 60px; }
+    .s24-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 16px; margin-top: 24px; }
+    .s24-card { background: linear-gradient(135deg,#1a0000,#0a0a0a); border: 1px solid rgba(204,0,0,.3); padding: 28px; display: flex; align-items: center; gap: 20px; transition: border-color .3s; }
+    .s24-card:hover { border-color: var(--red); }
+    .s24-icon { font-size: 2.2rem; }
+    .s24-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase; }
+    .s24-sub { font-size: .8rem; color: #888; margin-top: 2px; }
+
+    /* USED CARS */
+    #carros { background: var(--dark); }
+    .cars-intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; margin-bottom: 60px; }
+    .guarantee-box { background: linear-gradient(135deg,#1a0000,#0d0d0d); border: 1px solid rgba(204,0,0,.4); padding: 36px; position: relative; overflow: hidden; }
+    .guarantee-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg,var(--red),transparent); }
+    .guarantee-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .guarantee-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .guarantee-list li { display: flex; align-items: flex-start; gap: 12px; font-size: .92rem; color: #ccc; line-height: 1.5; }
+    .guarantee-list li .check { color: var(--red); font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .cars-cta-box { display: flex; flex-direction: column; gap: 20px; }
+    .cars-cta-box p { color: #aaa; line-height: 1.7; font-size: 1rem; }
+    .cars-phones { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+    .cars-phone-btn { display: flex; align-items: center; gap: 14px; background: var(--dark3); border: 1px solid #333; padding: 14px 20px; text-decoration: none; color: var(--white); transition: border-color .2s, background .2s; }
+    .cars-phone-btn:hover { border-color: var(--red); background: #1f0000; }
+    .cars-phone-btn .phone-icon { font-size: 1.3rem; }
+    .cars-phone-label { font-size: .7rem; color: #888; text-transform: uppercase; letter-spacing: 1.5px; }
+    .cars-phone-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.15rem; letter-spacing: 1px; }
+    .cars-features { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 2px; }
+    .car-feature { background: var(--dark3); padding: 28px 24px; border-bottom: 2px solid transparent; transition: border-color .3s, transform .3s; }
+    .car-feature:hover { border-color: var(--red); transform: translateY(-3px); }
+    .car-feature-icon { font-size: 1.8rem; margin-bottom: 12px; }
+    .car-feature-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; text-transform: uppercase; margin-bottom: 6px; }
+    .car-feature-desc { font-size: .82rem; color: #888; line-height: 1.5; }
+    .cars-banner { margin-top: 50px; background: linear-gradient(135deg,#1a0000 0%,#0a0a0a 60%,#1a0000 100%); border: 1px solid rgba(204,0,0,.35); padding: 40px; display: flex; align-items: center; justify-content: space-between; gap: 30px; flex-wrap: wrap; position: relative; overflow: hidden; }
+    .cars-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+    .cars-banner-text h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2rem; text-transform: uppercase; }
+    .cars-banner-text p { color: #aaa; margin-top: 6px; font-size: .95rem; }
+    .cars-banner-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* SOCIAL */
+    #social { background: var(--dark3); }
+    .social-cards { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 16px; margin-top: 8px; }
+    .social-card { border: 1px solid #333; padding: 32px 28px; text-decoration: none; color: var(--white); display: flex; align-items: center; gap: 20px; transition: border-color .3s,transform .3s,background .3s; position: relative; overflow: hidden; }
+    .social-card::before { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--red); transition: width .3s; }
+    .social-card:hover { transform: translateY(-4px); background: #222; }
+    .social-card:hover::before { width: 100%; }
+    .social-card-icon { flex-shrink: 0; }
+    .social-card-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
+    .social-card-handle { font-size: .82rem; color: #888; margin-top: 3px; }
+    .social-card-cta { margin-top: 10px; font-size: .75rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+    .social-card.tiktok { background: linear-gradient(135deg,#0a0a0a,#001a1a); border-color: rgba(0,242,234,.25); }
+    .social-card.tiktok:hover { border-color: #00f2ea; }
+    .social-card.tiktok::before { background: #00f2ea; }
+    .social-card.tiktok .social-card-cta { color: #00f2ea; }
+    .social-card.instagram { background: linear-gradient(135deg,#0a0a0a,#1a001a); border-color: rgba(225,48,108,.25); }
+    .social-card.instagram:hover { border-color: #e1306c; }
+    .social-card.instagram::before { background: linear-gradient(90deg,#f09433,#dc2743,#bc1888); }
+    .social-card.instagram .social-card-cta { color: #e1306c; }
+    .social-card.email { border-color: rgba(234,67,53,.25); }
+    .social-card.email:hover { border-color: #ea4335; }
+    .social-card.email::before { background: #ea4335; }
+    .social-card.email .social-card-cta { color: #ea4335; }
+
+    /* ABOUT */
+    #nosotros { background: var(--dark2); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-img-wrap { position: relative; }
+    .about-img-box { width: 100%; aspect-ratio: 4/3; background: linear-gradient(135deg,#1a0000,#111); border: 2px solid rgba(204,0,0,.3); display: flex; align-items: center; justify-content: center; font-size: 6rem; position: relative; overflow: hidden; }
+    .about-img-box::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(204,0,0,.04) 20px,rgba(204,0,0,.04) 21px); }
+    .about-corner { position: absolute; width: 40px; height: 40px; border-color: var(--red); border-style: solid; }
+    .about-corner.tl { top: -8px; left: -8px; border-width: 3px 0 0 3px; }
+    .about-corner.br { bottom: -8px; right: -8px; border-width: 0 3px 3px 0; }
+    .about-list { list-style: none; margin-top: 32px; display: flex; flex-direction: column; gap: 12px; }
+    .about-list li { display: flex; align-items: center; gap: 12px; font-size: .95rem; color: #ccc; }
+    .about-list li::before { content: ''; width: 20px; height: 2px; background: var(--red); flex-shrink: 0; }
+
+    /* CONTACT */
+    #contacto { background: var(--dark); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+    .contact-info { display: flex; flex-direction: column; gap: 28px; margin-top: 8px; }
+    .contact-item { display: flex; gap: 16px; align-items: flex-start; }
+    .contact-icon { width: 44px; height: 44px; flex-shrink: 0; background: rgba(204,0,0,.1); border: 1px solid rgba(204,0,0,.4); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .contact-label { font-family: 'Barlow Condensed', sans-serif; font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin-bottom: 4px; }
+    .contact-value { font-size: 1rem; color: var(--white); font-weight: 500; }
+    .contact-value a { color: var(--white); text-decoration: none; }
+    .contact-value a:hover { color: var(--red); }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; color: #888; }
+    .form-input,.form-textarea,.form-select { background: var(--dark3); border: 1px solid #333; color: var(--white); padding: 12px 16px; font-family: 'Barlow', sans-serif; font-size: .95rem; outline: none; transition: border-color .2s; resize: vertical; width: 100%; }
+    .form-select option { background: var(--dark3); }
+    .form-input:focus,.form-textarea:focus,.form-select:focus { border-color: var(--red); }
+    .form-textarea { min-height: 120px; }
+    .form-submit { background: var(--red); color: var(--white); border: none; padding: 14px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; clip-path: polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); transition: background .2s; margin-top: 8px; width: 100%; }
+    .form-submit:hover { background: var(--red-bright); }
+    .form-success { display: none; background: linear-gradient(135deg,#001a00,#0a0a0a); border: 1px solid rgba(0,200,0,.3); padding: 20px; text-align: center; color: #88ff88; font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; letter-spacing: 1px; }
+
+    /* FOOTER */
+    footer { background: #050505; border-top: 2px solid var(--red); padding: 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+    .footer-logo span { color: var(--red); }
+    .footer-copy { font-size: .8rem; color: #555; }
+
+    /* FLOATING */
+    .float-btns { position: fixed; bottom: 30px; right: 30px; z-index: 200; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+    .float-btn { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform .2s; }
+    .float-btn:hover { transform: scale(1.12); }
+    .float-call { background: var(--red); font-size: 1.4rem; box-shadow: 0 4px 20px rgba(204,0,0,.5); animation: pulse 2s infinite; }
+    .float-tiktok { background: #010101; border: 2px solid #00f2ea; box-shadow: 0 4px 20px rgba(0,242,234,.25); }
+    @keyframes pulse { 0%,100%{box-shadow:0 4px 20px rgba(204,0,0,.5)} 50%{box-shadow:0 4px 35px rgba(204,0,0,.85)} }
+
+    /* RESPONSIVE */
+    @media (max-width:1000px) { .nav-links { display: none; } }
+    @media (max-width:768px) {
+      nav { padding: 0 16px; }
+      section { padding: 70px 20px; }
+      #nosotros { grid-template-columns: 1fr; gap: 40px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .cars-intro-grid { grid-template-columns: 1fr; gap: 40px; }
+      footer { flex-direction: column; text-align: center; padding: 30px 20px; }
+      .float-btns { bottom: 20px; right: 16px; }
+      .cars-banner { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Fast <span>Mechanic</span> Solutions</div>
+  <ul class="nav-links">
+    <li><a href="#servicios" data-es="Servicios" data-en="Services">Servicios</a></li>
+    <li><a href="#carros" data-es="Carros Usados" data-en="Used Cars">Carros Usados</a></li>
+    <li><a href="#social" data-es="Redes" data-en="Social">Redes</a></li>
+    <li><a href="#nosotros" data-es="Nosotros" data-en="About">Nosotros</a></li>
+    <li><a href="#contacto" data-es="Contacto" data-en="Contact">Contacto</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="tel:4147799345" class="nav-cta" data-es="📞 Llamar" data-en="📞 Call Now">📞 Llamar</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-bars"><span></span><span></span><span></span></div>
+  <div class="hero-content">
+    <div class="hero-badge" data-es="⚙️ Milwaukee, WI · Mecánica & Carros Usados" data-en="⚙️ Milwaukee, WI · Auto Repair & Used Cars">⚙️ Milwaukee, WI · Mecánica & Carros Usados</div>
+    <h1 class="hero-title">Fast<br><span class="red">Mechanic</span><br>Solutions</h1>
+    <p class="hero-subtitle" data-es="Taller mecánico de confianza en Milwaukee. Reparaciones rápidas y honestas. Venta de carros usados con garantía. Servicio de grúa 24 horas." data-en="Milwaukee's trusted auto repair shop. Fast, honest repairs. Used cars sold with a quality guarantee. 24-hour tow truck service.">
+      Taller mecánico de confianza en Milwaukee. Reparaciones rápidas y honestas. Venta de carros usados con garantía. Servicio de grúa 24 horas.
+    </p>
+    <div class="hero-actions">
+      <a href="tel:4147799345" class="btn-primary">📞 (414) 779-9345</a>
+      <a href="#carros" class="btn-outline" data-es="🚗 Ver Carros" data-en="🚗 See Cars">🚗 Ver Carros</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">24h</div><div class="stat-label" data-es="Grúa" data-en="Tow Truck">Grúa</div></div>
+      <div><div class="stat-num">100%</div><div class="stat-label" data-es="Garantía" data-en="Guarantee">Garantía</div></div>
+      <div><div class="stat-num">MKE</div><div class="stat-label">Milwaukee, WI</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servicios">
+  <div class="max-w">
+    <div class="section-tag" data-es="⚙️ Lo que ofrecemos" data-en="⚙️ What We Offer">⚙️ Lo que ofrecemos</div>
+    <h2 class="section-title" data-es="Servicios Mecánicos" data-en="Mechanic Services">Servicios Mecánicos</h2>
+    <p class="section-sub" data-es="Contamos con todo lo que tu vehículo necesita. Trabajamos con profesionalismo, rapidez y honestidad." data-en="We have everything your vehicle needs. We work with professionalism, speed, and honesty.">Contamos con todo lo que tu vehículo necesita. Trabajamos con profesionalismo, rapidez y honestidad.</p>
+    <div class="services-grid">
+      <div class="service-card"><div class="service-icon">🔧</div><div class="service-name" data-es="Mantenimiento Preventivo" data-en="Preventive Maintenance">Mantenimiento Preventivo</div><div class="service-desc" data-es="Cuida tu vehículo antes de que los problemas se agraven." data-en="Keep your vehicle in top shape before issues worsen.">Cuida tu vehículo antes de que los problemas se agraven.</div></div>
+      <div class="service-card"><div class="service-icon">🛑</div><div class="service-name" data-es="Reparación de Frenos" data-en="Brake Repair">Reparación de Frenos</div><div class="service-desc" data-es="Tu seguridad es lo primero. Diagnóstico y cambio de frenos." data-en="Your safety comes first. Full brake diagnosis and replacement.">Tu seguridad es lo primero. Diagnóstico y cambio de frenos.</div></div>
+      <div class="service-card"><div class="service-icon">❄️</div><div class="service-name" data-es="Reparación de AC" data-en="AC Repair">Reparación de AC</div><div class="service-desc" data-es="Recarga y reparación de sistemas de aire acondicionado." data-en="Recharge and repair of air conditioning systems.">Recarga y reparación de sistemas de aire acondicionado.</div></div>
+      <div class="service-card"><div class="service-icon">🛢️</div><div class="service-name" data-es="Cambio de Aceite" data-en="Oil Change">Cambio de Aceite</div><div class="service-desc" data-es="Cambio de aceite rápido para todos los modelos." data-en="Quick oil change for all vehicle makes and models.">Cambio de aceite rápido para todos los modelos.</div></div>
+      <div class="service-card"><div class="service-icon">💻</div><div class="service-name" data-es="Escáner / Diagnóstico" data-en="Scanner / Diagnostic">Escáner / Diagnóstico</div><div class="service-desc" data-es="Diagnóstico computarizado para identificar fallas con precisión." data-en="Computerized diagnostic to pinpoint issues accurately.">Diagnóstico computarizado para identificar fallas con precisión.</div></div>
+      <div class="service-card"><div class="service-icon">🔩</div><div class="service-name" data-es="Soldadura de Mufles" data-en="Exhaust Welding">Soldadura de Mufles</div><div class="service-desc" data-es="Reparación y soldadura profesional de escapes." data-en="Professional exhaust and muffler welding repair.">Reparación y soldadura profesional de escapes.</div></div>
+      <div class="service-card"><div class="service-icon">🚗</div><div class="service-name" data-es="Suspensión" data-en="Suspension">Suspensión</div><div class="service-desc" data-es="Revisión y reparación completa del sistema de suspensión." data-en="Full suspension system inspection and repair.">Revisión y reparación completa del sistema de suspensión.</div></div>
+      <div class="service-card"><div class="service-icon">📐</div><div class="service-name" data-es="Alineación Computarizada" data-en="Computerized Alignment">Alineación Computarizada</div><div class="service-desc" data-es="Alineación de precisión para mejor manejo y menor desgaste." data-en="Precision alignment for better handling and less tire wear.">Alineación de precisión para mejor manejo y menor desgaste.</div></div>
+      <div class="service-card"><div class="service-icon">🎨</div><div class="service-name" data-es="Pintura y Planchado" data-en="Painting & Body Work">Pintura y Planchado</div><div class="service-desc" data-es="Recupera la apariencia de tu vehículo con acabados profesionales." data-en="Restore your vehicle's appearance with professional finishes.">Recupera la apariencia de tu vehículo con acabados profesionales.</div></div>
+    </div>
+    <div class="services-24">
+      <div class="badge-24"><span class="dot"></span><span data-es="Disponible 24 Horas" data-en="Available 24 Hours">Disponible 24 Horas</span></div>
+      <div class="section-tag" data-es="🚨 Emergencias" data-en="🚨 Emergencies">🚨 Emergencias</div>
+      <h3 class="section-title" style="font-size:2rem" data-es="Servicios de Emergencia" data-en="Emergency Services">Servicios de Emergencia</h3>
+      <div class="s24-grid">
+        <div class="s24-card"><div class="s24-icon">🚛</div><div><div class="s24-title" data-es="Servicio de Grúa" data-en="Tow Truck Service">Servicio de Grúa</div><div class="s24-sub">Tow Truck · 24 hrs</div></div></div>
+        <div class="s24-card"><div class="s24-icon">🆘</div><div><div class="s24-title" data-es="Auxilio Mecánico" data-en="Roadside Assistance">Auxilio Mecánico</div><div class="s24-sub">Mechanical Assistance · 24 hrs</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USED CARS -->
+<section id="carros">
+  <div class="max-w">
+    <div class="section-tag" data-es="🚗 Compra con confianza" data-en="🚗 Buy with confidence">🚗 Compra con confianza</div>
+    <h2 class="section-title" data-es="Carros Usados" data-en="Used Cars">Carros Usados</h2>
+    <p class="section-sub" data-es="Vendemos carros usados en excelentes condiciones. Cada vehículo pasa por una revisión mecánica completa antes de la venta." data-en="We sell used cars in excellent condition. Every vehicle goes through a complete mechanical inspection before sale.">Vendemos carros usados en excelentes condiciones. Cada vehículo pasa por una revisión mecánica completa antes de la venta.</p>
+    <div class="cars-intro-grid">
+      <div class="guarantee-box">
+        <div class="guarantee-title">🛡️ <span data-es="Nuestra Garantía" data-en="Our Guarantee">Nuestra Garantía</span></div>
+        <ul class="guarantee-list">
+          <li><span class="check">✔</span><span data-es="Cada carro es inspeccionado y certificado por Anthony Zavaleta antes de la venta." data-en="Every car is inspected and certified by Anthony Zavaleta before sale.">Cada carro es inspeccionado y certificado por Anthony Zavaleta antes de la venta.</span></li>
+          <li><span class="check">✔</span><span data-es="Motor, transmisión, frenos, suspensión y electrónica revisados al 100%." data-en="Engine, transmission, brakes, suspension, and electronics checked 100%.">Motor, transmisión, frenos, suspensión y electrónica revisados al 100%.</span></li>
+          <li><span class="check">✔</span><span data-es="Te garantizamos que el carro está en excelentes condiciones mecánicas." data-en="We guarantee the car is in excellent mechanical condition.">Te garantizamos que el carro está en excelentes condiciones mecánicas.</span></li>
+          <li><span class="check">✔</span><span data-es="Si algo falla después de la compra, lo atendemos sin costo adicional." data-en="If something fails after purchase, we take care of it at no extra cost.">Si algo falla después de la compra, lo atendemos sin costo adicional.</span></li>
+          <li><span class="check">✔</span><span data-es="Precios justos y sin sorpresas escondidas." data-en="Fair prices with no hidden surprises.">Precios justos y sin sorpresas escondidas.</span></li>
+        </ul>
+      </div>
+      <div class="cars-cta-box">
+        <p data-es="¿Buscas un carro confiable a buen precio? Llámanos para ver qué vehículos tenemos disponibles. El inventario cambia constantemente." data-en="Looking for a reliable car at a fair price? Call us to see what vehicles we have available. Inventory changes constantly.">¿Buscas un carro confiable a buen precio? Llámanos para ver qué vehículos tenemos disponibles. El inventario cambia constantemente.</p>
+        <div class="cars-phones">
+          <a href="tel:4147799345" class="cars-phone-btn"><span class="phone-icon">📞</span><div><div class="cars-phone-label" data-es="Línea Principal" data-en="Main Line">Línea Principal</div><div class="cars-phone-num">(414) 779-9345</div></div></a>
+          <a href="tel:18622383727" class="cars-phone-btn"><span class="phone-icon">📞</span><div><div class="cars-phone-label" data-es="Línea Alterna" data-en="Alternate Line">Línea Alterna</div><div class="cars-phone-num">+1 (862) 238-3727</div></div></a>
+          <a href="#contacto" class="btn-primary" style="margin-top:8px;text-align:center;" data-es="✉️ Enviar Consulta" data-en="✉️ Send Inquiry">✉️ Enviar Consulta</a>
+        </div>
+      </div>
+    </div>
+    <div class="cars-features">
+      <div class="car-feature"><div class="car-feature-icon">🔍</div><div class="car-feature-title" data-es="Inspección Completa" data-en="Full Inspection">Inspección Completa</div><div class="car-feature-desc" data-es="Revisión de más de 50 puntos mecánicos." data-en="Over 50-point mechanical inspection.">Revisión de más de 50 puntos mecánicos.</div></div>
+      <div class="car-feature"><div class="car-feature-icon">🛡️</div><div class="car-feature-title" data-es="Garantía Mecánica" data-en="Mechanic Warranty">Garantía Mecánica</div><div class="car-feature-desc" data-es="Respaldamos cada vehículo que vendemos." data-en="We stand behind every vehicle we sell.">Respaldamos cada vehículo que vendemos.</div></div>
+      <div class="car-feature"><div class="car-feature-icon">💰</div><div class="car-feature-title" data-es="Precio Justo" data-en="Fair Price">Precio Justo</div><div class="car-feature-desc" data-es="Sin markups ni costos escondidos." data-en="No markups or hidden costs.">Sin markups ni costos escondidos.</div></div>
+      <div class="car-feature"><div class="car-feature-icon">🤝</div><div class="car-feature-title" data-es="Trato Honesto" data-en="Honest Deal">Trato Honesto</div><div class="car-feature-desc" data-es="Te decimos todo sobre el historial del vehículo." data-en="We tell you everything about the vehicle's history.">Te decimos todo sobre el historial del vehículo.</div></div>
+      <div class="car-feature"><div class="car-feature-icon">🔧</div><div class="car-feature-title" data-es="Listo para Manejar" data-en="Road Ready">Listo para Manejar</div><div class="car-feature-desc" data-es="Entregamos el carro afinado y listo." data-en="We deliver the car tuned up and ready.">Entregamos el carro afinado y listo.</div></div>
+      <div class="car-feature"><div class="car-feature-icon">📞</div><div class="car-feature-title" data-es="Soporte Post-Venta" data-en="After-Sale Support">Soporte Post-Venta</div><div class="car-feature-desc" data-es="Seguimos disponibles después de la venta." data-en="We stay available after the sale.">Seguimos disponibles después de la venta.</div></div>
+    </div>
+    <div class="cars-banner">
+      <div class="cars-banner-text">
+        <h3 data-es="¿Te interesa un carro?" data-en="Interested in a car?">¿Te interesa un carro?</h3>
+        <p data-es="Llámanos hoy para ver el inventario disponible. Sin citas, sin complicaciones." data-en="Call us today to see available inventory. No appointments, no hassle.">Llámanos hoy para ver el inventario disponible. Sin citas, sin complicaciones.</p>
+      </div>
+      <div class="cars-banner-actions">
+        <a href="tel:4147799345" class="btn-primary">📞 (414) 779-9345</a>
+        <a href="#contacto" class="btn-outline" data-es="Enviar Mensaje" data-en="Send Message">Enviar Mensaje</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section id="social">
+  <div class="max-w">
+    <div class="section-tag" data-es="📱 Síguenos" data-en="📱 Follow Us">📱 Síguenos</div>
+    <h2 class="section-title" data-es="Redes Sociales" data-en="Social Media">Redes Sociales</h2>
+    <p class="section-sub" data-es="Síguenos para ver trabajos, carros disponibles y promociones. ¡Escríbenos directo por nuestras redes!" data-en="Follow us to see our work, available cars and promotions. Message us directly on social media!">Síguenos para ver trabajos, carros disponibles y promociones. ¡Escríbenos directo por nuestras redes!</p>
+    <div class="social-cards">
+
+      <!-- TikTok -->
+      <a href="https://www.tiktok.com/@fastmechanicsolutions1?_r=1&_t=ZP-962ClmnWNCA" target="_blank" rel="noopener" class="social-card tiktok">
+        <div class="social-card-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.41a8.16 8.16 0 0 0 4.77 1.52V7.48a4.85 4.85 0 0 1-1-.79z"/></svg>
+        </div>
+        <div>
+          <div class="social-card-name">TikTok</div>
+          <div class="social-card-handle">@fastmechanicsolutions1</div>
+          <div class="social-card-cta" data-es="Ver videos →" data-en="Watch videos →">Ver videos →</div>
+        </div>
+      </a>
+
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/fastmechanicsolutions" target="_blank" rel="noopener" class="social-card instagram">
+        <div class="social-card-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </div>
+        <div>
+          <div class="social-card-name">Instagram</div>
+          <div class="social-card-handle">@fastmechanicsolutions</div>
+          <div class="social-card-cta" data-es="Ver fotos →" data-en="See photos →">Ver fotos →</div>
+        </div>
+      </a>
+
+      <!-- Email -->
+      <a href="mailto:Fast.Mechanic.Solutions@gmail.com" class="social-card email">
+        <div class="social-card-icon" style="font-size:2.5rem">✉️</div>
+        <div>
+          <div class="social-card-name">Email</div>
+          <div class="social-card-handle" style="font-size:.74rem">Fast.Mechanic.Solutions@gmail.com</div>
+          <div class="social-card-cta" data-es="Enviar correo →" data-en="Send email →">Enviar correo →</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="nosotros">
+  <div class="about-img-wrap">
+    <div class="about-img-box">🔧<div class="about-corner tl"></div><div class="about-corner br"></div></div>
+  </div>
+  <div>
+    <div class="section-tag" data-es="👤 Quiénes somos" data-en="👤 Who We Are">👤 Quiénes somos</div>
+    <h2 class="section-title">Anthony<br><span style="color:var(--red)">Zavaleta</span></h2>
+    <p class="section-sub" data-es="Mecánico en General con años de experiencia en Milwaukee. Comprometido con brindar un servicio honesto, rápido y de calidad — tanto en reparaciones como en la venta de carros usados." data-en="General mechanic with years of experience in Milwaukee. Committed to providing honest, fast, quality service — both in repairs and used car sales.">Mecánico en General con años de experiencia en Milwaukee. Comprometido con brindar un servicio honesto, rápido y de calidad — tanto en reparaciones como en la venta de carros usados.</p>
+    <ul class="about-list">
+      <li data-es="Mecánico certificado con experiencia comprobada" data-en="Certified mechanic with proven experience">Mecánico certificado con experiencia comprobada</li>
+      <li data-es="Servicio bilingüe: Español e Inglés" data-en="Bilingual service: Spanish and English">Servicio bilingüe: Español e Inglés</li>
+      <li data-es="Precios justos y transparentes" data-en="Fair and transparent pricing">Precios justos y transparentes</li>
+      <li data-es="Venta de carros usados con garantía mecánica" data-en="Used car sales with mechanical guarantee">Venta de carros usados con garantía mecánica</li>
+      <li data-es="Diagnóstico honesto sin costos escondidos" data-en="Honest diagnosis with no hidden fees">Diagnóstico honesto sin costos escondidos</li>
+      <li data-es="Ubicados en el corazón de Milwaukee, WI" data-en="Located in the heart of Milwaukee, WI">Ubicados en el corazón de Milwaukee, WI</li>
+    </ul>
+    <div style="margin-top:36px;display:flex;gap:14px;flex-wrap:wrap">
+      <a href="tel:4147799345" class="btn-primary" data-es="Llamar Ahora" data-en="Call Now">Llamar Ahora</a>
+      <a href="#carros" class="btn-outline" data-es="Ver Carros" data-en="See Cars">Ver Carros</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="max-w">
+    <div class="section-tag" data-es="📬 Escríbenos" data-en="📬 Get in Touch">📬 Escríbenos</div>
+    <h2 class="section-title" data-es="Contáctanos" data-en="Contact Us">Contáctanos</h2>
+    <p class="section-sub" data-es="¿Preguntas sobre servicios o carros disponibles? Mándanos un mensaje y te respondemos pronto." data-en="Questions about services or available cars? Send us a message and we'll get back to you soon.">¿Preguntas sobre servicios o carros disponibles? Mándanos un mensaje y te respondemos pronto.</p>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-info">
+          <div class="contact-item"><div class="contact-icon">📍</div><div><div class="contact-label" data-es="Dirección" data-en="Address">Dirección</div><div class="contact-value">2101 S 37TH ST, Milwaukee, WI 53215</div></div></div>
+          <div class="contact-item"><div class="contact-icon">📞</div><div><div class="contact-label" data-es="Teléfono Principal" data-en="Main Phone">Teléfono Principal</div><div class="contact-value"><a href="tel:4147799345">(414) 779-9345</a></div></div></div>
+          <div class="contact-item"><div class="contact-icon">📞</div><div><div class="contact-label" data-es="Teléfono Alternativo" data-en="Alternate Phone">Teléfono Alternativo</div><div class="contact-value"><a href="tel:18622383727">+1 (862) 238-3727</a></div></div></div>
+          <div class="contact-item"><div class="contact-icon">✉️</div><div><div class="contact-label">Email</div><div class="contact-value"><a href="mailto:Fast.Mechanic.Solutions@gmail.com">Fast.Mechanic.Solutions@gmail.com</a></div></div></div>
+        </div>
+      </div>
+      <div>
+        <form id="contactForm" class="contact-form" action="https://formspree.io/f/mykokkyq" method="POST">
+          <div class="form-group">
+            <label class="form-label" data-es="Nombre completo" data-en="Full name">Nombre completo</label>
+            <input type="text" name="name" class="form-input" data-placeholder-es="Tu nombre" data-placeholder-en="Your name" placeholder="Tu nombre" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-es="Teléfono" data-en="Phone">Teléfono</label>
+            <input type="tel" name="phone" class="form-input" placeholder="(414) 000-0000" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-input" data-placeholder-es="tu@email.com" data-placeholder-en="your@email.com" placeholder="tu@email.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-es="¿Sobre qué nos escribes?" data-en="What is this about?">¿Sobre qué nos escribes?</label>
+            <select name="subject" class="form-select">
+              <option value="" data-es="— Selecciona una opción —" data-en="— Select an option —">— Selecciona una opción —</option>
+              <option value="servicio" data-es="Servicio mecánico" data-en="Mechanic service">Servicio mecánico</option>
+              <option value="carro" data-es="Compra de carro usado" data-en="Used car purchase">Compra de carro usado</option>
+              <option value="grua" data-es="Servicio de grúa" data-en="Tow truck service">Servicio de grúa</option>
+              <option value="otro" data-es="Otro" data-en="Other">Otro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-es="Mensaje" data-en="Message">Mensaje</label>
+            <textarea name="message" class="form-textarea" data-placeholder-es="Cuéntanos cómo podemos ayudarte..." data-placeholder-en="Tell us how we can help you..." placeholder="Cuéntanos cómo podemos ayudarte..." required></textarea>
+          </div>
+          <button type="submit" class="form-submit" data-es="Enviar Mensaje →" data-en="Send Message →">Enviar Mensaje →</button>
+          <div class="form-success" id="formSuccess">
+            ✅ <span data-es="¡Mensaje enviado! Te contactaremos pronto." data-en="Message sent! We will contact you soon.">¡Mensaje enviado! Te contactaremos pronto.</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Fast <span>Mechanic</span> Solutions <span>LLC</span></div>
+  <div class="footer-copy">© 2025 Fast Mechanic Solutions LLC · Milwaukee, WI · <span data-es="Mecánica & Carros Usados" data-en="Auto Repair & Used Cars">Mecánica & Carros Usados</span></div>
+</footer>
+
+<!-- Floating buttons -->
+<div class="float-btns">
+  <a href="https://www.tiktok.com/@fastmechanicsolutions1?_r=1&_t=ZP-962ClmnWNCA" target="_blank" rel="noopener" class="float-btn float-tiktok" title="TikTok">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.41a8.16 8.16 0 0 0 4.77 1.52V7.48a4.85 4.85 0 0 1-1-.79z"/></svg>
+  </a>
+  <a href="tel:4147799345" class="float-btn float-call" title="Call Now">📞</a>
+</div>
+
+<script>
+  let lang = 'es';
+
+  function setLang(l) {
+    lang = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === l));
+    document.querySelectorAll('[data-es]').forEach(el => {
+      const t = el.getAttribute('data-' + l);
+      if (t) el.textContent = t;
+    });
+    document.querySelectorAll('[data-placeholder-' + l + ']').forEach(el => {
+      el.placeholder = el.getAttribute('data-placeholder-' + l);
+    });
+    document.documentElement.lang = l;
+  }
+
+  // Formspree AJAX submit
+  const form = document.getElementById('contactForm');
+  const successBox = document.getElementById('formSuccess');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = form.querySelector('.form-submit');
+    btn.textContent = lang === 'es' ? 'Enviando...' : 'Sending...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        form.reset();
+        form.style.display = 'none';
+        successBox.style.display = 'block';
+      } else {
+        btn.textContent = lang === 'es' ? 'Error. Intenta de nuevo.' : 'Error. Please try again.';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = lang === 'es' ? 'Error. Intenta de nuevo.' : 'Error. Please try again.';
+      btn.disabled = false;
+    }
+  });
+
+  // Nav highlight on scroll
+  const secs = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    secs.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+    navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--red)' : ''; });
+  });
+</script>
+</body>
+</html>
